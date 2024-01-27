@@ -11,7 +11,7 @@
                             <div class="col-12 p-1">
                                 <label class="form-label">Category Name *</label>
                                 <input type="text" class="form-control" id="categoryNameUpdate">
-                                <input class="d-none" id="updateID">
+                                <input class="" id="updateID">
                             </div>
                         </div>
                     </div>
@@ -25,3 +25,34 @@
         </div>
     </div>
 </div>
+<script>
+    async function FillupUpdateData(id) {
+        document.getElementById('updateID').value = id;
+        let res = await axios.post('/category-details', {
+            id: id
+        });
+        document.getElementById('categoryNameUpdate').value = res.data.category.name;
+    }
+
+    async function Update() {
+        let name = document.getElementById('categoryNameUpdate').value;
+        let id = document.getElementById('updateID').value;
+        if (name.length === 0) {
+            errorToast('Category name is required');
+        } else {
+            document.getElementById('update-modal-close').click();
+            showLoader();
+            let res = await axios.post('/category-update', {
+                name: name,
+                id: id
+            });
+            hideLoader();
+            if (res.data === 1 && res.status === 200) {
+                successToast('category Updated');
+                await getList();
+            } else {
+                errorToast('someting went wrong. please try  again')
+            }
+        }
+    }
+</script>

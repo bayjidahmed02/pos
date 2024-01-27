@@ -38,4 +38,6 @@ Route::middleware([TokenVerificationMiddleware::class])->group(function () {
     Route::get('/category', [CategoryController::class, 'index'])->name('category');
     Route::post('/category-create', [CategoryController::class, 'create']);
     Route::get('/category-list', [CategoryController::class, 'categoryList']);
+    Route::post('/category-details', [CategoryController::class, 'categoryDetails']);
+    Route::post('/category-update', [CategoryController::class, 'categoryUpdate']);
 });

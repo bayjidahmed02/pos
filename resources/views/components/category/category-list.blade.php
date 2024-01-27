@@ -33,7 +33,7 @@
 
 
 <script>
-    getList()
+    getList();
     async function getList() {
         showLoader();
         let res = await axios.get('/category-list');
@@ -50,12 +50,27 @@
                     <td>${index+1}</td>
                     <td>${item.name}</td>
                     <td class="d-flex gap-3">
-                        <button data-id="${item.id}" class="btn btn-sm btn-outline-success">Edit</button>
-                        <button data-id="${item.id}" class="btn btn-sm btn-outline-danger">Delete</button>
+                        <button data-id="${item.id}" class="editBtn btn btn-sm btn-outline-success">Edit</button>
+                        <button data-id="${item.id}" class="deleteBtn btn btn-sm btn-outline-danger">Delete</button>
                     </td>
                 </tr>`
             tableList.append(rows)
         });
+
+        $('.editBtn').on('click', async function() {
+            let id = $(this).data('id');
+            await FillupUpdateData(id);
+            $('#update-modal').modal('show');
+            $('#updateID').val(id);
+        });
+
+
+        $('.deleteBtn').on('click', function() {
+            let id = $(this).data('id');
+            console.log(id);
+        });
+
+
         tableData.DataTable()
     }
 </script>
