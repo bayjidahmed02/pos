@@ -11,7 +11,7 @@
                             <div class="col-12 p-1">
                                 <label class="form-label">Category Name *</label>
                                 <input type="text" class="form-control" id="categoryNameUpdate">
-                                <input class="" id="updateID">
+                                <input class="d-none" id="updateID">
                             </div>
                         </div>
                     </div>

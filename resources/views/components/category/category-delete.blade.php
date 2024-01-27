@@ -17,3 +17,21 @@
         </div>
     </div>
 </div>
+
+<script>
+    async function itemDelete() {
+        let id = document.getElementById('deleteID').value;
+        document.getElementById('delete-modal-close').click();
+        showLoader();
+        let res = await axios.post('/category-delete', {
+            id: id
+        });
+        hideLoader();
+        if (res.data === 1) {
+            successToast('Category Deleted Successfully');
+            await getList();
+        } else {
+            errorToast('Something went wrong. please try again')
+        }
+    }
+</script>

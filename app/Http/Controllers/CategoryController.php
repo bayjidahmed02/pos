@@ -20,13 +20,13 @@ class CategoryController extends Controller
             'user_id' => $user_id
         ]);
     }
-    public function categoryList(Request $request)
+    public function list(Request $request)
     {
         $user_id = $request->header('id');
         return Category::where('user_id', $user_id)->get();
     }
 
-    public function categoryDetails(Request $request)
+    public function details(Request $request)
     {
         try {
             $category_id = $request->input('id');
@@ -47,7 +47,7 @@ class CategoryController extends Controller
             ]);
         }
     }
-    public function categoryUpdate(Request $request)
+    public function update(Request $request)
     {
         $user_id = $request->header('id');
         $category_id = $request->input('id');
@@ -55,5 +55,11 @@ class CategoryController extends Controller
         return Category::where('id', $category_id)->where('user_id', $user_id)->update([
             'name' => $name
         ]);
+    }
+    public function delete(Request $request)
+    {
+        $user_id = $request->header('id');
+        $category_id = $request->input('id');
+        return Category::where('id', $category_id)->where('user_id', $user_id)->delete();
     }
 }

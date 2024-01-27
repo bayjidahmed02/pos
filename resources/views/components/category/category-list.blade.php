@@ -64,10 +64,10 @@
             $('#updateID').val(id);
         });
 
-
         $('.deleteBtn').on('click', function() {
             let id = $(this).data('id');
-            console.log(id);
+            $('#delete-modal').modal('show');
+            $('#deleteID').val(id)
         });
 
 
