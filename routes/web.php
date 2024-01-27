@@ -3,6 +3,7 @@
 use GuzzleHttp\Middleware;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Middleware\TokenVerificationMiddleware;
 
 
@@ -29,4 +30,12 @@ Route::middleware([TokenVerificationMiddleware::class])->group(function () {
     Route::post('/update', [UserController::class, 'updateProfile']);
     Route::get('/logout', [UserController::class, 'logout'])->name('logout');
     Route::post('/reset-password', [UserController::class, 'resetPassword']);
+});
+
+
+// Category Routes
+Route::middleware([TokenVerificationMiddleware::class])->group(function () {
+    Route::get('/category', [CategoryController::class, 'index'])->name('category');
+    Route::post('/category-create', [CategoryController::class, 'create']);
+    Route::get('/category-list', [CategoryController::class, 'categoryList']);
 });

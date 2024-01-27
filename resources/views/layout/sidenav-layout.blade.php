@@ -84,7 +84,7 @@
             <span class="side-bar-item-caption">Customer</span>
         </a>
 
-        <a href="{{ url('/categoryPage') }}" class="side-bar-item">
+        <a href="{{ route('category') }}" class="side-bar-item">
             <i class="bi bi-list-nested"></i>
             <span class="side-bar-item-caption">Category</span>
         </a>
