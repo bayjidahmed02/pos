@@ -11,7 +11,7 @@ class CustomerController extends Controller
     {
         return view('pages.dashboard.customer-page');
     }
-    public function store(Request $request)
+    public function create(Request $request)
     {
         return Customer::create([
             'user_id' => $request->header('id'),

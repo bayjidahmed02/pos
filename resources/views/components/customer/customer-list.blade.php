@@ -30,3 +30,35 @@
         </div>
     </div>
 </div>
+
+<script>
+    getList();
+    async function getList() {
+        showLoader();
+        let res = await axios.get('/customers-list');
+        hideLoader();
+
+        let tableData = $('#tableData');
+        let tableList = $('#tableList');
+
+
+        res.data.forEach(function(item, index) {
+            let rows =
+                `<tr>
+                    <td>${index+1}</td>
+                    <td>${item.name}</td>
+                    <td>${item.email}</td>
+                    <td>${item.mobile}</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-success">Edit</button>
+                        <button class="btn btn-sm btn-outline-danger">Delete</button>
+                    </td>
+                </tr>`
+            tableList.append(rows);
+        });
+
+        tableData.DataTable({
+            lengthMenu: [5, 10, 20]
+        });
+    }
+</script>
