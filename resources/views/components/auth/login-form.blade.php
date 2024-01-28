@@ -42,7 +42,7 @@
                 if (res.status === 200 && res.data.status === 'success') {
                     successToast(res.data.message);
                     setTimeout(() => {
-                        window.location.href = '/profile'
+                        window.location.href = '/dashboard';
                     }, 2000);
                 } else {
                     hideLoader();
