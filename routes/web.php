@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\ProductController;
 use App\Http\Middleware\TokenVerificationMiddleware;
 
 
@@ -52,4 +53,14 @@ Route::middleware([TokenVerificationMiddleware::class])->group(function () {
     Route::post('/customer-details', [CustomerController::class, 'details']);
     Route::post('/customer-update', [CustomerController::class, 'update']);
     Route::post('/customer-delete', [CustomerController::class, 'delete']);
+});
+
+
+Route::middleware([TokenVerificationMiddleware::class])->group(function () {
+    Route::get('/product', [ProductController::class, 'index'])->name('product');
+    Route::post('/product-create', [ProductController::class, 'create']);
+    Route::get('/product-list', [ProductController::class, 'list']);
+    Route::post('/product-details', [ProductController::class, 'details']);
+    Route::post('/product-update', [ProductController::class, 'update']);
+    Route::post('/product-delete', [ProductController::class, 'delete']);
 });
