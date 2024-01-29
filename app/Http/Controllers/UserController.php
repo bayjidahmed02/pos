@@ -12,6 +12,10 @@ use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
+    public function index()
+    {
+        return view('pages.dashboard.dashboard-page');
+    }
     public function registration(Request $request)
     {
         try {
@@ -39,6 +43,7 @@ class UserController extends Controller
             $email = $request->input('email');
             $password = $request->input('password');
             $user = User::where('email', $email)->where('password', $password)->select('id')->first();
+
             if ($user !== null) {
                 $token = JWTToken::createToken($email, $user->id);
                 return response()->json([
@@ -54,7 +59,7 @@ class UserController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'status' => false,
-                'message' => 'unauthorized '
+                'message' => 'unauthorized'
             ]);
         }
     }

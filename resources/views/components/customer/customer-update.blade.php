@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-md modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Update Customer</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Update Customer Info</h5>
             </div>
             <div class="modal-body">
                 <form id="update-form">
@@ -32,3 +32,43 @@
         </div>
     </div>
 </div>
+
+
+
+<script>
+    async function FillupUpdateForom(id) {
+        document.getElementById('updateID').value = id
+        let res = await axios.post('/customer-details', {
+            id: id
+        });
+        document.getElementById('customerNameUpdate').value = res.data.name
+        document.getElementById('customerEmailUpdate').value = res.data.email
+        document.getElementById('customerMobileUpdate').value = res.data.mobile
+    }
+
+    async function Update() {
+        let id = document.getElementById('updateID').value
+        let name = document.getElementById('customerNameUpdate').value
+        let email = document.getElementById('customerEmailUpdate').value
+        let mobile = document.getElementById('customerMobileUpdate').value
+        if (name.length === 0 || email.length === 0 || mobile.length === 0) {
+            errorToast('All Fields are required')
+        } else {
+            document.getElementById('update-modal-close').click();
+            showLoader();
+            let res = await axios.post('/customer-update', {
+                id: id,
+                name: name,
+                email: email,
+                mobile: mobile
+            });
+            hideLoader();
+            if (res.data === 1) {
+                successToast('Customer info Updated');
+                await getList();
+            } else {
+                errorToast('Customer Cannot Updated')
+            }
+        }
+    }
+</script>

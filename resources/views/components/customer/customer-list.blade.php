@@ -35,12 +35,13 @@
     getList();
     async function getList() {
         showLoader();
-        let res = await axios.get('/customers-list');
+        let res = await axios.get('/customer-list');
         hideLoader();
 
         let tableData = $('#tableData');
         let tableList = $('#tableList');
-
+        tableData.DataTable().destroy();
+        tableList.empty();
 
         res.data.forEach(function(item, index) {
             let rows =
@@ -50,15 +51,31 @@
                     <td>${item.email}</td>
                     <td>${item.mobile}</td>
                     <td>
-                        <button class="btn btn-sm btn-outline-success">Edit</button>
-                        <button class="btn btn-sm btn-outline-danger">Delete</button>
+                        <button data-id="${item.id}" class="editBtn btn btn-sm btn-outline-success">Edit</button>
+                        <button data-id="${item.id}" class="deleteBtn btn btn-sm btn-outline-danger">Delete</button>
                     </td>
                 </tr>`
             tableList.append(rows);
         });
 
+        $('.editBtn').on('click', async function() {
+            let id = $(this).data('id');
+            await FillupUpdateForom(id)
+            $('#update-modal').modal('show');
+            $('#updateID').val(id);
+        });
+
+
+        $('.deleteBtn').on('click', function() {
+            let id = $(this).data('id');
+            $('#delete-modal').modal('show');
+            $('#deleteID').val(id);
+        });
+
+
+
         tableData.DataTable({
-            lengthMenu: [5, 10, 20]
+            lengthMenu: [10, 20]
         });
     }
 </script>

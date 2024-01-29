@@ -28,32 +28,30 @@
         </div>
     </div>
 </div>
+
+
 <script>
     async function Save() {
         let name = document.getElementById('customerName').value;
         let email = document.getElementById('customerEmail').value;
         let mobile = document.getElementById('customerMobile').value;
         if (name.length === 0 || email.length === 0 || mobile.length === 0) {
-            errorToast('All fields are required')
+            errorToast('All Fields are required');
         } else {
             document.getElementById('modal-close').click();
             showLoader();
-            try {
-                let res = await axios.post('/customers-create', {
-                    name: name,
-                    email: email,
-                    mobile: mobile
-                });
-                hideLoader();
-                if (res.status === 201 && res.data === 1) {
-                    successToast('Customer created successfully');
-                    document.getElementById('save-form').reset();
-                    await getList();
-                } else {
-                    errorToast('Customer creation failed. please try again');
-                }
-            } catch (error) {
-                errorToast('something went wrong. please try again');
+            let res = await axios.post("/customer-create", {
+                name: name,
+                email: email,
+                mobile: mobile,
+            });
+            hideLoader();
+            if (res.status === 201) {
+                successToast('Customer created successfully');
+                document.getElementById('save-form').reset();
+                await getList();
+            } else {
+                errorToast('Customer creation failed. please try again')
             }
         }
     }

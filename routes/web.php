@@ -46,10 +46,10 @@ Route::middleware([TokenVerificationMiddleware::class])->group(function () {
 
 
 Route::middleware([TokenVerificationMiddleware::class])->group(function () {
-    Route::get('/customers', [CustomerController::class, 'index'])->name('customers');
-    Route::post('/customers-create', [CustomerController::class, 'create']);
-    Route::get('/customers-list', [CustomerController::class, 'list']);
-    Route::post('/customers-details', [CustomerController::class, 'details']);
-    Route::post('/customers-update', [CustomerController::class, 'update']);
-    Route::post('/customers-delete', [CustomerController::class, 'delete']);
+    Route::get('/customer', [CustomerController::class, 'index'])->name('customer');
+    Route::post('/customer-create', [CustomerController::class, 'create']);
+    Route::get('/customer-list', [CustomerController::class, 'list']);
+    Route::post('/customer-details', [CustomerController::class, 'details']);
+    Route::post('/customer-update', [CustomerController::class, 'update']);
+    Route::post('/customer-delete', [CustomerController::class, 'delete']);
 });
