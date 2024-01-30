@@ -15,8 +15,10 @@
                 <table class="table" id="tableData">
                     <thead>
                         <tr class="bg-light">
+                            <th>SL no</th>
                             <th>Image</th>
                             <th>Name</th>
+                            {{-- <th>Category Name</th> --}}
                             <th>Price</th>
                             <th>Unit</th>
                             <th>Action</th>
@@ -30,3 +32,37 @@
         </div>
     </div>
 </div>
+
+
+<script>
+    getList();
+    async function getList() {
+        showLoader();
+        let res = await axios.get('/product-list');
+        hideLoader();
+
+        let tableData = $('#tableData');
+        let tableList = $('#tableList');
+
+        res.data.forEach(function(item, index) {
+            let rows =
+                `<tr>
+                    <td>${index+1}</td>
+                    <td><img class="w-30 h-auto" src="${item.img_url}"/></td>
+                    <td>${item.name}</td>
+                 <!--   <td>${item.category_id}</td> -->
+                    <td>${item.price}</td>
+                    <td>${item.unit}</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-success">Edit</button>
+                        <button class="btn btn-sm btn-outline-danger">Delete</button>
+                    </td>
+                </tr>`
+            tableList.append(rows);
+        });
+
+        tableData.DataTable({
+            lengthMenu: [10, 20, 50]
+        })
+    }
+</script>

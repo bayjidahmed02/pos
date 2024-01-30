@@ -33,8 +33,7 @@ class ProductController extends Controller
     public function list(Request $request)
     {
         $user_id = $request->header('id');
-        $category_id = $request->input('category_id');
-        return Product::where('user_id', $user_id)->where('category_id', $category_id)->get();
+        return Product::where('user_id', $user_id)->get();
     }
     public function update(Request $request)
     {
