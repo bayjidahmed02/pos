@@ -29,14 +29,17 @@
                                 <br />
 
                                 <label class="form-label">Image</label>
-                                <input oninput="newImg.src=window.URL.createObjectURL(this.files[0])" type="file"
+                                {{-- <input oninput="newImg.src=window.URL.createObjectURL(this.files[0])" type="file"
+                                    class="form-control" id="productImg"> --}}
+                                <input type="file" oninput="newImg.src=window.URL.createObjectURL(this.files[0])"
                                     class="form-control" id="productImg">
-
                             </div>
                         </div>
                     </div>
                 </form>
             </div>
+
+
             <div class="modal-footer">
                 <button id="modal-close" class="btn bg-gradient-primary mx-2" data-bs-dismiss="modal"
                     aria-label="Close">Close</button>
@@ -45,3 +48,50 @@
         </div>
     </div>
 </div>
+<script>
+    FillupCategoryDropdown();
+    async function FillupCategoryDropdown() {
+        let res = await axios.get('/category-list');
+        res.data.forEach(function(item, index) {
+            let option = `<option value="${item.id}">${item.name}</option>`
+            $('#productCategory').append(option);
+        });
+    }
+
+    async function Save() {
+        let category = document.getElementById('productCategory').value;
+        let name = document.getElementById('productName').value;
+        let price = document.getElementById('productPrice').value;
+        let unit = document.getElementById('productUnit').value;
+        let img = document.getElementById('productImg').files[0];
+
+        if (category.length === 0 || name.length === 0 || price.length === 0 || unit.length === 0 || !img) {
+            errorToast('All Fields are Required')
+        } else {
+            document.getElementById('modal-close').click();
+
+            let formData = new FormData();
+            formData.append('name', name);
+            formData.append('price', price);
+            formData.append('unit', unit);
+            formData.append('img', img);
+            formData.append('category_id', category);
+
+            const config = {
+                headers: {
+                    'content-type': 'multipart/form-data'
+                }
+            }
+            showLoader();
+            let res = await axios.post('/product-create', formData, config);
+            hideLoader();
+            if (res.status === 201) {
+                successToast('Product Created Successfully');
+                document.getElementById('save-form').reset();
+                await getList();
+            } else {
+                errorToast('Product Cannot Created')
+            }
+        }
+    }
+</script>

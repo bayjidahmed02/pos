@@ -44,6 +44,9 @@
         let tableData = $('#tableData');
         let tableList = $('#tableList');
 
+        tableData.DataTable().destroy();
+        tableList.empty();
+
         res.data.forEach(function(item, index) {
             let rows =
                 `<tr>
@@ -54,12 +57,28 @@
                     <td>${item.price}</td>
                     <td>${item.unit}</td>
                     <td>
-                        <button class="btn btn-sm btn-outline-success">Edit</button>
-                        <button class="btn btn-sm btn-outline-danger">Delete</button>
+                        <button data-path="${item.img_url}" data-id="${item.id}" class="editBtn btn btn-sm btn-outline-success">Edit</button>
+                        <button data-path="${item.img_url}" data-id="${item.id}" class="deleteBtn btn btn-sm btn-outline-danger">Delete</button>
                     </td>
                 </tr>`
             tableList.append(rows);
         });
+
+        $('.editBtn').on('click', async function() {
+            let id = $(this).data('id');
+            let img_url = $(this).data('path')
+            await FillupUpdateForm(id, img_url);
+            $('#update-modal').modal('show');
+        })
+
+        $('.deleteBtn').on('click', function() {
+            let id = $(this).data('id')
+            let img_url = $(this).data('path')
+            $('#delete-modal').modal('show');
+            $('#deleteID').val(id)
+            $('#deleteFilePath').val(img_url)
+        })
+
 
         tableData.DataTable({
             lengthMenu: [10, 20, 50]

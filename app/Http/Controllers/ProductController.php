@@ -38,7 +38,7 @@ class ProductController extends Controller
     public function update(Request $request)
     {
         $user_id = $request->header('id');
-        $product_id = $request->input('product_id');
+        $product_id = $request->input('id');
 
         if ($request->hasFile('img')) {
             $img = $request->file('img');
@@ -47,17 +47,19 @@ class ProductController extends Controller
             $img_url = 'uploads/' . $img_name;
 
             $old_img = $request->input('old_img');
-            File::delete($old_img);
-
-            return Product::where('id', $product_id)->where('user_id', $user_id)->update([
-                'category_id' => $request->input('category_id'),
-                'name' => $request->input('name'),
-                'price' => $request->input('price'),
-                'unit' => $request->input('unit'),
-                'img_url' => $img_url
-            ]);
+            if (File::exists($old_img)) {
+                File::delete($old_img);
+                return Product::where('id', $product_id)->where('user_id', $user_id)->update([
+                    'category_id' => $request->input('category_id'),
+                    'name' => $request->input('name'),
+                    'price' => $request->input('price'),
+                    'unit' => $request->input('unit'),
+                    'img_url' => $img_url
+                ]);
+            } else {
+                return 'Product Image Cannot find';
+            }
         } else {
-
             return Product::where('id', $product_id)->where('user_id', $user_id)->update([
                 'category_id' => $request->input('category_id'),
                 'name' => $request->input('name'),
@@ -69,7 +71,7 @@ class ProductController extends Controller
     public function delete(Request $request)
     {
         $user_id = $request->header('id');
-        $product_id = $request->input('product_id');
+        $product_id = $request->input('id');
         $img_url = $request->input('img_url');
         File::delete($img_url);
         return Product::where('user_id', $user_id)->where('id', $product_id)->delete();
@@ -77,7 +79,7 @@ class ProductController extends Controller
     public function details(Request $request)
     {
         $user_id = $request->header('id');
-        $product_id = $request->input('product_id');
+        $product_id = $request->input('id');
         return Product::where('user_id', $user_id)->where('id', $product_id)->first();
     }
 }

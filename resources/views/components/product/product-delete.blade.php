@@ -19,3 +19,23 @@
         </div>
     </div>
 </div>
+
+<script>
+    async function itemDelete() {
+        let id = document.getElementById('deleteID').value;
+        let img_url = document.getElementById('deleteFilePath').value;
+        document.getElementById('delete-modal-close').click();
+        showLoader();
+        let res = await axios.post('/product-delete', {
+            id: id,
+            img_url: img_url
+        });
+        hideLoader();
+        if (res.data === 1) {
+            successToast('Product Deleted Successfully');
+            await getList();
+        } else {
+            errorToast('Product Cannot Deleted')
+        }
+    }
+</script>
