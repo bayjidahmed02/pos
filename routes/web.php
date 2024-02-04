@@ -64,3 +64,5 @@ Route::middleware([TokenVerificationMiddleware::class])->group(function () {
     Route::post('/product-update', [ProductController::class, 'update']);
     Route::post('/product-delete', [ProductController::class, 'delete']);
 });
+
+// Invoice and API Routes
