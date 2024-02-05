@@ -97,11 +97,8 @@
                     </table>
                 </div>
             </div>
-
         </div>
     </div>
-
-
 
 
     <div class="modal animated zoomIn" id="create-modal" tabindex="-1" aria-labelledby="exampleModalLabel"
@@ -137,4 +134,40 @@
             </div>
         </div>
     </div>
+
+    <script>
+        (async function() {
+            showLoader();
+            await CustomerList();
+            hideLoader();
+        })();
+
+
+        async function CustomerList() {
+            let res = await axios.get('/customer-list')
+
+            let customerTable = $('#customerTable');
+            let customerList = $('#customerList');
+            customerTable.DataTable().destroy();
+            customerList.empty();
+            res.data.forEach(function(item, index) {
+                let rows =
+                    `<tr>
+                        <td><i class="bi bi-person"></i> ${item.name}</td>
+                        <td><a class="btn btn-sm btn-outline-dark text-xxs m-0 px-2 py-1 rounded">Add</a></td>
+
+                    </tr>`
+                customerList.append(rows)
+            });
+            customerTable.DataTable({
+                // scrollCollapse: false,
+                info: false,
+                lengthChange: false,
+                paging: false,
+            });
+
+
+        }
+    </script>
+
 @endsection

@@ -65,15 +65,11 @@
             $('#updateID').val(id);
         });
 
-
         $('.deleteBtn').on('click', function() {
             let id = $(this).data('id');
             $('#delete-modal').modal('show');
             $('#deleteID').val(id);
         });
-
-
-
         tableData.DataTable({
             lengthMenu: [10, 20]
         });
