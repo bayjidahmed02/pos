@@ -1,4 +1,5 @@
 @extends('layout.sidenav-layout')
+@section('page_title', 'Generate Invoice')
 @section('content')
     <div class="container-fluid">
         <div class="row">
@@ -41,11 +42,14 @@
                             <p class="text-bold text-xs my-1 text-dark"> TOTAL: <i class="bi bi-currency-dollar"></i> <span
                                     id="total"></span></p>
                             <p class="text-bold text-xs my-2 text-dark"> PAYABLE: <i class="bi bi-currency-dollar"></i>
-                                <span id="payable"></span></p>
+                                <span id="payable"></span>
+                            </p>
                             <p class="text-bold text-xs my-1 text-dark"> VAT(5%): <i class="bi bi-currency-dollar"></i>
-                                <span id="vat"></span></p>
+                                <span id="vat"></span>
+                            </p>
                             <p class="text-bold text-xs my-1 text-dark"> Discount: <i class="bi bi-currency-dollar"></i>
-                                <span id="discount"></span></p>
+                                <span id="discount"></span>
+                            </p>
                             <span class="text-xxs">Discount(%):</span>
                             <input onkeydown="return false" value="0" min="0" type="number" step="0.25"
                                 onchange="DiscountChange()" class="form-control w-40 " id="discountP" />
