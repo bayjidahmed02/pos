@@ -139,6 +139,7 @@
         (async function() {
             showLoader();
             await CustomerList();
+            await ProductList();
             hideLoader();
         })();
 
@@ -163,10 +164,33 @@
                 // scrollCollapse: false,
                 info: false,
                 lengthChange: false,
-                paging: false,
+
             });
 
 
+        }
+
+
+        async function ProductList() {
+            let res = await axios.get('/product-list')
+            let productTable = $('#productTable');
+            let productList = $('#productList');
+
+            res.data.forEach(function(item, index) {
+                let rows =
+                    `<tr>
+                        <td><img src="${item.img_url}" width="30"/> ${item.name}</td>
+                        <td><a class="btn btn-sm btn-outline-dark text-xxs m-0 px-2 py-1 rounded">Add</a></td>
+
+                    </tr>`
+
+                productList.append(rows);
+            });
+            productTable.DataTable({
+
+                lengthChange: false,
+                info: false
+            });
         }
     </script>
 
