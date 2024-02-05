@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ProductController;
 use App\Http\Middleware\TokenVerificationMiddleware;
 
@@ -66,3 +67,8 @@ Route::middleware([TokenVerificationMiddleware::class])->group(function () {
 });
 
 // Invoice and API Routes
+Route::middleware([TokenVerificationMiddleware::class])->group(function () {
+    Route::get('/invoice', [InvoiceController::class, 'index'])->name('invoice.index');
+    Route::get('/sale', [InvoiceController::class, 'salePage'])->name('sale');
+    Route::post('/create', [InvoiceController::class, 'invoiceCreate']);
+});
