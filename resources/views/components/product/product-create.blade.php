@@ -88,6 +88,7 @@
             if (res.status === 201) {
                 successToast('Product Created Successfully');
                 document.getElementById('save-form').reset();
+                document.getElementById('newImg').src = "{{ asset('images/default.jpg') }}";
                 await getList();
             } else {
                 errorToast('Product Cannot Created')

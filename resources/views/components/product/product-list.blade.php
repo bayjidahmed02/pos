@@ -53,7 +53,6 @@
                     <td>${index+1}</td>
                     <td><img class="w-30 h-auto" src="${item.img_url}"/></td>
                     <td>${item.name}</td>
-                 <!--   <td>${item.category_id}</td> -->
                     <td>${item.price}</td>
                     <td>${item.unit}</td>
                     <td>

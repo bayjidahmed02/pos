@@ -148,14 +148,16 @@
 
         invoiceItemList = [];
 
+
         function showInvoiceItem() {
             let invoiceTable = $('#invoiceTable');
             let invoiceList = $('#invoiceList');
             invoiceList.empty();
             invoiceItemList.forEach(function(item, index) {
+                let shortName = item.name.length > 10 ? item.name.substring(0, 10) + '...' : item.name;
                 let rows =
                     `<tr>
-                        <td>${item.name}</td>
+                        <td>${shortName}</td>
                         <td>${item.qty}</td>
                         <td>${item.price}</td>
                         <td>
@@ -164,6 +166,7 @@
                     </tr>`
 
                 invoiceList.append(rows);
+
             });
             GrandTotal();
             $('.removeBtn').on('click', function() {
@@ -181,7 +184,7 @@
 
             let totalPrice = (parseFloat(price) * qty).toFixed(2);
 
-            if (!id || !name || !price || !qty) {
+            if (id.length === 0 || name.length === 0 || price.length === 0 || qty.length === 0) {
                 errorToast('All Fields are Required');
             } else {
                 let item = {
@@ -192,7 +195,6 @@
                 }
                 invoiceItemList.push(item);
                 $('#create-modal').modal('hide');
-                console.log(item);
                 $('#add-form')[0].reset();
                 showInvoiceItem();
             }
@@ -262,9 +264,14 @@
             let productList = $('#productList');
 
             res.data.forEach(function(item, index) {
+                let shortName = item.name.length > 10 ? item.name.substring(0, 20) + '...' : item.name;
                 let rows =
                     `<tr>
-                        <td><img src="${item.img_url}" width="30"/> ${item.name}</td>
+                        <td>
+                            <img src="${item.img_url}" width="30"/>
+                            <span>${shortName}</span>
+                        </td>
+
                         <td>
                             <a data-id="${item.id}" data-name="${item.name}" data-price="${item.price}" class="addProduct btn btn-sm btn-outline-dark text-xxs m-0 px-2 py-1 rounded">Add</a>
                         </td>
@@ -290,34 +297,43 @@
 
 
         async function createInvoice() {
-            let total = document.getElementById('total').innerText;
-            let discount = document.getElementById('discount').innerText;
-            let vat = document.getElementById('vat').innerText;
-            let payable = document.getElementById('payable').innerText;
-            let id = document.getElementById('CId').innerText;
-
-            let data = {
-                "total": total,
-                "discount": discount,
-                "vat": vat,
-                "payable": payable,
-                "customer_id": id,
-                "products": invoiceItemList
-            }
-            if (id.length === 0) {
-                errorToast('Customer Required');
-            } else if (invoiceItemList.length === 0) {
-                errorToast('Before invoice create please add Product');
-            } else {
-                showLoader();
-                let res = await axios.post('/invoice-create', data);
-                hideLoader();
-                if (res.data === 1) {
-                    window.location.href = '/invoice';
-                    successToast('Invoice Created')
+            try {
+                let total = document.getElementById('total').innerText;
+                let discount = document.getElementById('discount').innerText;
+                let vat = document.getElementById('vat').innerText;
+                let payable = document.getElementById('payable').innerText;
+                let id = document.getElementById('CId').innerText;
+                console.log(id);
+                if (id.length === 0) {
+                    errorToast('Customer Required');
+                } else if (invoiceItemList.length === 0) {
+                    errorToast('Before invoice create please add Product');
                 } else {
-                    errorToast('something went wrong')
+                    showLoader();
+
+                    let data = {
+                        "total": total,
+                        "discount": discount,
+                        "vat": vat,
+                        "payable": payable,
+                        "customer_id": id,
+                        "products": invoiceItemList
+                    }
+
+                    let res = await axios.post('/invoice-create', data);
+
+                    console.log(res);
+                    hideLoader();
+                    if (res.status === 200) {
+                        window.location.href = '/invoice';
+                        successToast('Invoice Created')
+                    } else {
+                        errorToast('cannot created')
+                    }
                 }
+            } catch (error) {
+                errorToast('something went wrong')
+                console.error(error);
             }
         }
     </script>

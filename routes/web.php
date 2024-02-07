@@ -15,7 +15,6 @@ Route::view('/registration', 'pages.auth.registration-page')->name('registration
 Route::view('/login', 'pages.auth.login-page')->name('login');
 Route::view('/send-otp', 'pages.auth.send-otp-page')->name('sendOTP');
 Route::view('/verify-otp', 'pages.auth.verify-otp-page');
-Route::view('/profile', 'pages.dashboard.profile-page')->name('profile');
 
 
 // Authentication API Routes
@@ -28,6 +27,7 @@ Route::post('/verify-otp', [UserController::class, 'verifyOTP']);
 Route::middleware([TokenVerificationMiddleware::class])->group(function () {
     Route::get('/', [UserController::class, 'index']);
     Route::view('/dashboard', 'pages.dashboard.dashboard-page');
+    Route::view('/profile', 'pages.dashboard.profile-page')->name('profile');
     Route::view('/reset-password', 'pages.auth.reset-pass-page');
     Route::get('/profile-details', [UserController::class, 'profileDetails']);
     Route::post('/update', [UserController::class, 'updateProfile']);
