@@ -45,13 +45,14 @@
                 email: email,
                 mobile: mobile,
             });
+
             hideLoader();
-            if (res.status === 201) {
-                successToast('Customer created successfully');
+            if (res.data.status === 'success' && res.status === 200) {
+                successToast(res.data.msg);
                 document.getElementById('save-form').reset();
                 await getList();
             } else {
-                errorToast('Customer creation failed. please try again')
+                errorToast(res.data.msg)
             }
         }
     }

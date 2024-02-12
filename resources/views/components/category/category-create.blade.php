@@ -39,12 +39,12 @@
                 name: name
             });
             hideLoader();
-            if (res.status === 201) {
-                successToast('Category created successfully');
+            if (res.status === 200 && res.data.status === 'success') {
+                successToast(res.data.msg);
                 document.getElementById('save-form').reset();
                 await getList()
             } else {
-                errorToast('something went wrong. please try again')
+                errorToast(res.data.msg)
             }
         }
     }

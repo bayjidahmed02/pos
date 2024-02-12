@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use Exception;
 use Illuminate\Http\Request;
 
 class CustomerController extends Controller
@@ -13,12 +14,28 @@ class CustomerController extends Controller
     }
     public function create(Request $request)
     {
-        return Customer::create([
-            'user_id' => $request->header('id'),
-            'name' => $request->input('name'),
-            'email' => $request->input('email'),
-            'mobile' => $request->input('mobile'),
-        ]);
+        try {
+            $request->validate([
+                'name' => 'required|string',
+                'email' => 'email|string',
+                'mobile' => 'required|numeric',
+            ]);
+            Customer::create([
+                'user_id' => $request->header('id'),
+                'name' => $request->input('name'),
+                'email' => $request->input('email'),
+                'mobile' => $request->input('mobile'),
+            ]);
+            return response()->json([
+                'status' => 'success',
+                'msg' => 'Created'
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'msg' => 'Something went wrong'
+            ]);
+        }
     }
     public function list(Request $request)
     {

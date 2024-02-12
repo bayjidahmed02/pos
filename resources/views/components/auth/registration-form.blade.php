@@ -68,6 +68,7 @@
                 if (res.status === 200 && res.data.status === 'success') {
                     successToast(res.data.message);
                     setTimeout(() => {
+                        debugger
                         window.location.href = '/login';
                     }, 2000);
                 } else {

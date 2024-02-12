@@ -32,10 +32,8 @@
                                 {{-- <input type="file" oninput="oldImg.src=window.URL.createObjectURL(this.files[0])"
                                     class="form-control" id="productImgUpdate"> --}}
 
-                                <input type="text" class="" id="updateID">
-                                <input type="text" class="" id="filePath">
-
-
+                                <input type="text" class="d-none" id="updateID">
+                                <input type="text" class="d-none" id="filePath">
                             </div>
                         </div>
                     </div>

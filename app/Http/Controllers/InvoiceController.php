@@ -51,10 +51,15 @@ class InvoiceController extends Controller
                 ]);
             }
             DB::commit();
-            return 1;
+            return response()->json([
+                'status' => 'success',
+                'msg' => 'Successfully Created'
+            ]);
         } catch (Exception $e) {
             DB::rollBack();
-            return 0;
+            return response()->json([
+                'msg' => $e->getMessage()
+            ]);
         }
     }
     public function list(Request $request)

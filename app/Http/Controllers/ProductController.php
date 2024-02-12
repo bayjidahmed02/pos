@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use Exception;
 use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
 
@@ -14,21 +15,40 @@ class ProductController extends Controller
     }
     public function create(Request $request)
     {
-        $user_id = $request->header('id');
-        if ($request->hasFile('img')) {
-            $img = $request->file('img');
-            $img_name = $user_id . '_' . $img->getClientOriginalName();
-            $img->move(public_path('uploads'), $img_name);
-            $img_url = 'uploads/' . $img_name;
+        try {
+            $request->validate([
+                'name' => 'required|string',
+                'price' => 'required|numeric',
+                'unit' => 'required|numeric',
+                'img' => 'required|mimes:png,jpg,webp,gif,svg,jpeg'
+            ]);
+
+            $user_id = $request->header('id');
+            if ($request->hasFile('img')) {
+                $img = $request->file('img');
+                $img_name = $user_id . '_' . $img->getClientOriginalName();
+                $img->move(public_path('uploads'), $img_name);
+                $img_url = 'uploads/' . $img_name;
+            }
+
+            Product::create([
+                'user_id' => $request->header('id'),
+                'category_id' => $request->input('category_id'),
+                'name' => $request->input('name'),
+                'price' => $request->input('price'),
+                'unit' => $request->input('unit'),
+                'img_url' => $img_url
+            ]);
+            return response()->json([
+                'status' => 'success',
+                'msg' => 'added'
+            ]);
+        } catch (Exception) {
+            return response()->json([
+                'status' => 'error',
+                'msg' => 'something went wrong'
+            ]);
         }
-        return Product::create([
-            'user_id' => $request->header('id'),
-            'category_id' => $request->input('category_id'),
-            'name' => $request->input('name'),
-            'price' => $request->input('price'),
-            'unit' => $request->input('unit'),
-            'img_url' => $img_url
-        ]);
     }
     public function list(Request $request)
     {

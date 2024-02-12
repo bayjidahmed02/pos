@@ -14,11 +14,23 @@ class CategoryController extends Controller
     }
     public function create(Request $request)
     {
-        $user_id = $request->header('id');
-        return  Category::create([
-            'name' => $request->name,
-            'user_id' => $user_id
-        ]);
+        try {
+            $user_id = $request->header('id');
+            $request->validate(['name' => 'required|string']);
+            Category::create([
+                'name' => $request->name,
+                'user_id' => $user_id
+            ]);
+            return response()->json([
+                'status' => 'success',
+                'msg' => 'Created'
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'msg' => 'Something went wrong'
+            ]);
+        }
     }
     public function list(Request $request)
     {

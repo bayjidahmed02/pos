@@ -85,13 +85,13 @@
             showLoader();
             let res = await axios.post('/product-create', formData, config);
             hideLoader();
-            if (res.status === 201) {
-                successToast('Product Created Successfully');
+            if (res.status === 200 && res.data.status === 'success') {
+                successToast(res.data.msg);
                 document.getElementById('save-form').reset();
                 document.getElementById('newImg').src = "{{ asset('images/default.jpg') }}";
                 await getList();
             } else {
-                errorToast('Product Cannot Created')
+                errorToast(res.data.msg)
             }
         }
     }

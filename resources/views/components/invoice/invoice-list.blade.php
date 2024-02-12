@@ -32,3 +32,36 @@
         </div>
     </div>
 </div>
+<script>
+    getList();
+    async function getList() {
+        showLoader();
+        let res = await axios.get('/invoice-list')
+        hideLoader();
+
+        let tableData = $('#tableData');
+        let tableList = $('#tableList');
+
+        tableData.DataTable().destroy();
+        tableList.empty();
+
+        res.data.forEach(function(item, index) {
+            let rows =
+                `<tr>
+                    <td>${index+1}</td>
+                    <td>${item.customer.name}</td>
+                    <td>${item.customer.mobile}</td>
+                    <td>${item.total}</td>
+                    <td>${item.vat}</td>
+                    <td>${item.discount}</td>
+                    <td>${item.payable}</td>
+                    <td class="d-flex gap-2">
+                        <a class="btn btn-sm btn-success px-3 py-2 m-0">View</a>
+                        <a class="btn btn-sm btn-danger px-3 py-2 m-0">Delete</a>
+                    </td>
+                </tr>`
+            tableList.append(rows);
+        });
+        tableData.DataTable();
+    }
+</script>

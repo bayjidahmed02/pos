@@ -39,25 +39,25 @@
                     <hr class="mx-0 my-2 p-0 bg-secondary" />
                     <div class="row">
                         <div class="col-12">
-                            <p class="text-bold text-xs my-1 text-dark"> TOTAL: <i class="bi bi-currency-dollar"></i> <span
-                                    id="total"></span>
+                            <p class="text-bold text-xs my-1 text-dark">
+                                TOTAL: <i class="bi bi-currency-dollar"></i>
+                                <span id="total"></span>
                             </p>
-
-                            <p class="text-bold text-xs my-1 text-dark"> VAT(5%): <i class="bi bi-currency-dollar"></i>
+                            <p class="text-bold text-xs my-1 text-dark">
+                                VAT(5%): <i class="bi bi-currency-dollar"></i>
                                 <span id="vat"></span>
                             </p>
-                            <p class="text-bold text-xs my-1 text-dark"> Discount: <i class="bi bi-currency-dollar"></i>
+                            <p class="text-bold text-xs my-1 text-dark">
+                                Discount: <i class="bi bi-currency-dollar"></i>
                                 <span id="discount"></span>
                             </p>
-                            <p class="text-bold text-xs my-2 text-dark"> PAYABLE: <i class="bi bi-currency-dollar"></i>
+                            <p class="text-bold text-xs my-2 text-dark">
+                                PAYABLE: <i class="bi bi-currency-dollar"></i>
                                 <span id="payable"></span>
                             </p>
                             <span class="text-xxs">Discount(%):</span>
-                            {{-- <input onkeydown="return false" value="0" min="0" type="number" step="0.25"
-                                onchange="DiscountChange()" class="form-control w-40 " id="discountP" /> --}}
-
-                            <input value="0" min="0" type="number" onchange="DiscountChange()"
-                                class="form-control w-40 " id="discountP" />
+                            <input onkeydown="return false" value="0" min="0" type="number" step="0.25"
+                                onchange="DiscountChange()" class="form-control w-40 " id="discountP" />
 
                             <button onclick="createInvoice()" class="btn  my-3 bg-gradient-primary w-40">Confirm</button>
                         </div>
@@ -148,7 +148,6 @@
 
         invoiceItemList = [];
 
-
         function showInvoiceItem() {
             let invoiceTable = $('#invoiceTable');
             let invoiceList = $('#invoiceList');
@@ -159,14 +158,12 @@
                     `<tr>
                         <td>${shortName}</td>
                         <td>${item.qty}</td>
-                        <td>${item.price}</td>
+                        <td>${item.sale_price}</td>
                         <td>
                             <a data-index="${index}" class="removeBtn btn btn-sm text-xxs px-2 py-1 m-0">Remove</a>
                         </td>
                     </tr>`
-
                 invoiceList.append(rows);
-
             });
             GrandTotal();
             $('.removeBtn').on('click', function() {
@@ -177,20 +174,20 @@
         }
 
         function add() {
-            let id = document.getElementById('PId').value;
+            let product_id = document.getElementById('PId').value;
             let name = document.getElementById('PName').value;
-            let price = document.getElementById('PPrice').value;
+            let sale_price = document.getElementById('PPrice').value;
             let qty = document.getElementById('PQty').value;
 
-            let totalPrice = (parseFloat(price) * qty).toFixed(2);
+            let totalPrice = (parseFloat(sale_price) * qty).toFixed(2);
 
-            if (id.length === 0 || name.length === 0 || price.length === 0 || qty.length === 0) {
+            if (product_id.length === 0 || name.length === 0 || sale_price.length === 0 || qty.length === 0) {
                 errorToast('All Fields are Required');
             } else {
                 let item = {
-                    id: id,
+                    product_id: product_id,
                     name: name,
-                    price: totalPrice,
+                    sale_price: totalPrice,
                     qty: qty
                 }
                 invoiceItemList.push(item);
@@ -213,7 +210,7 @@
             let discountPercentage = parseFloat(document.getElementById('discountP').value);
 
             invoiceItemList.forEach(function(item, index) {
-                total = total + parseFloat(item.price);
+                total = total + parseFloat(item.sale_price);
             });
 
             discount = (total * discountPercentage) / 100;
@@ -297,43 +294,32 @@
 
 
         async function createInvoice() {
-            try {
-                let total = document.getElementById('total').innerText;
-                let discount = document.getElementById('discount').innerText;
-                let vat = document.getElementById('vat').innerText;
-                let payable = document.getElementById('payable').innerText;
-                let id = document.getElementById('CId').innerText;
-                console.log(id);
-                if (id.length === 0) {
-                    errorToast('Customer Required');
-                } else if (invoiceItemList.length === 0) {
-                    errorToast('Before invoice create please add Product');
+            let total = document.getElementById('total').innerText;
+            let discount = document.getElementById('discount').innerText;
+            let vat = document.getElementById('vat').innerText;
+            let payable = document.getElementById('payable').innerText;
+            let customer_id = document.getElementById('CId').innerText;
+            let products = invoiceItemList;
+
+            if (customer_id.length === 0) {
+                errorToast('Customer Required')
+            } else if (products.length === 0) {
+                errorToast('Products Required')
+            } else {
+                let res = await axios.post('/invoice-create', {
+                    total: total,
+                    discount: discount,
+                    vat: vat,
+                    payable: payable,
+                    customer_id: customer_id,
+                    products: products,
+                });
+                if (res.status === 200 && res.data.status === 'success') {
+                    successToast(res.data.msg);
+                    window.location.href = '/invoice'
                 } else {
-                    showLoader();
-
-                    let data = {
-                        "total": total,
-                        "discount": discount,
-                        "vat": vat,
-                        "payable": payable,
-                        "customer_id": id,
-                        "products": invoiceItemList
-                    }
-
-                    let res = await axios.post('/invoice-create', data);
-
-                    console.log(res);
-                    hideLoader();
-                    if (res.status === 200) {
-                        window.location.href = '/invoice';
-                        successToast('Invoice Created')
-                    } else {
-                        errorToast('cannot created')
-                    }
+                    errorToast(res.data.msg);
                 }
-            } catch (error) {
-                errorToast('something went wrong')
-                console.error(error);
             }
         }
     </script>
