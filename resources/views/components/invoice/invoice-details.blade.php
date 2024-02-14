@@ -43,13 +43,17 @@
                     <div class="row">
                         <div class="col-12">
                             <p class="text-bold text-xs my-1 text-dark"> TOTAL: <i class="bi bi-currency-dollar"></i>
-                                <span id="total"></span></p>
-                            <p class="text-bold text-xs my-2 text-dark"> PAYABLE: <i class="bi bi-currency-dollar"></i>
-                                <span id="payable"></span></p>
+                                <span id="total"></span>
+                            </p>
                             <p class="text-bold text-xs my-1 text-dark"> VAT(5%): <i class="bi bi-currency-dollar"></i>
-                                <span id="vat"></span></p>
+                                <span id="vat"></span>
+                            </p>
                             <p class="text-bold text-xs my-1 text-dark"> Discount: <i class="bi bi-currency-dollar"></i>
-                                <span id="discount"></span></p>
+                                <span id="discount"></span>
+                            </p>
+                            <p class="text-bold text-xs my-2 text-dark"> PAYABLE: <i class="bi bi-currency-dollar"></i>
+                                <span id="payable"></span>
+                            </p>
                         </div>
 
                     </div>
@@ -62,3 +66,45 @@
         </div>
     </div>
 </div>
+<script>
+    async function invoiceDetails(invoice_id, customer_id) {
+        showLoader();
+        let res = await axios.post('/invoice-details', {
+            invoice_id: invoice_id,
+            customer_id: customer_id
+        });
+        hideLoader();
+        document.getElementById('CName').innerText = res.data.customer.name;
+        document.getElementById('CEmail').innerText = res.data.customer.email;
+        document.getElementById('CId').innerText = res.data.customer.id;
+
+        document.getElementById('total').innerText = res.data.invoice.total;
+        document.getElementById('payable').innerText = res.data.invoice.payable;
+        document.getElementById('vat').innerText = res.data.invoice.vat;
+        document.getElementById('discount').innerText = res.data.invoice.discount;
+
+
+        let invoiceList = $('#invoiceList');
+        invoiceList.empty();
+
+        res.data.product.forEach(function(item, index) {
+            let rows =
+                `<tr>
+                    <td>${item.product.name}</td>
+                    <td>${item.qty}</td>
+                    <td>${item.sale_price}</td>
+                </tr>`
+            invoiceList.append(rows)
+        });
+    }
+
+
+    function PrintPage() {
+        let printContents = document.getElementById('invoice').innerHTML;
+        let originalContents = document.body.innerHTML;
+        document.body.innerHTML = printContents;
+        window.print();
+        document.body.innerHTML = originalContents;
+        location.reload();
+    }
+</script>

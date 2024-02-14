@@ -75,7 +75,7 @@ class InvoiceController extends Controller
 
         $customer_details = Customer::where('user_id', $user_id)->where('id', $customer_id)->first();
         $invoice_total = Invoice::where('user_id', $user_id)->where('id', $invoice_id)->first();
-        $invoice_product = InvoiceProduct::where('invoice_id', $invoice_id)->where('user_id', $user_id)->get();
+        $invoice_product = InvoiceProduct::where('invoice_id', $invoice_id)->where('user_id', $user_id)->with('product')->get();
         return array(
             'customer' => $customer_details,
             'invoice' => $invoice_total,
@@ -87,13 +87,20 @@ class InvoiceController extends Controller
         DB::beginTransaction();
         try {
             $user_id = $request->header('id');
-            InvoiceProduct::where('invoice_id', $request->input('invoice_id'))->where('user_id', $user_id)->delete();
-            Invoice::where('id',  $request->input('invoice_id'))->delete();
+            $id = $request->input('invoice_id');
+            InvoiceProduct::where('invoice_id',  $id)->where('user_id', $user_id)->delete();
+            Invoice::where('id', $id)->delete();
             DB::commit();
-            return 1;
+            return response()->json([
+                'status' => 'success',
+                'msg' => 'Deleted'
+            ]);
         } catch (Exception $e) {
             DB::rollBack();
-            return 0;
+            return response()->json([
+                'status' => 'error',
+                'msg' => $e->getMessage()
+            ]);
         }
     }
 }
