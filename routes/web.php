@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ProductController;
 use App\Http\Middleware\TokenVerificationMiddleware;
@@ -25,8 +26,6 @@ Route::post('/verify-otp', [UserController::class, 'verifyOTP']);
 
 // Authentication Middleware Routes
 Route::middleware([TokenVerificationMiddleware::class])->group(function () {
-    Route::get('/', [UserController::class, 'index']);
-    Route::view('/dashboard', 'pages.dashboard.dashboard-page');
     Route::view('/profile', 'pages.dashboard.profile-page')->name('profile');
     Route::view('/reset-password', 'pages.auth.reset-pass-page');
     Route::get('/profile-details', [UserController::class, 'profileDetails']);
@@ -74,4 +73,11 @@ Route::middleware([TokenVerificationMiddleware::class])->group(function () {
     Route::post('/invoice-details', [InvoiceController::class, 'details']);
     Route::get('/invoice-list', [InvoiceController::class, 'list']);
     Route::post('/invoice-delete', [InvoiceController::class, 'delete']);
+});
+
+
+// Summery  and Report
+Route::middleware([TokenVerificationMiddleware::class])->group(function () {
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/summery', [DashboardController::class, 'summery']);
 });

@@ -74,7 +74,7 @@
 
     <div id="sideNavRef" class="side-nav-open">
 
-        <a href="{{ url('/dashboard') }}" class="side-bar-item">
+        <a href="{{ route('dashboard') }}" class="side-bar-item">
             <i class="bi bi-graph-up"></i>
             <span class="side-bar-item-caption">Dashboard</span>
         </a>

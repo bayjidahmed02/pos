@@ -42,7 +42,8 @@
                 if (res.status === 200 && res.data.status === 'success') {
                     successToast(res.data.message);
                     setTimeout(() => {
-                        window.location.href = '/dashboard';
+                        // debugger
+                        window.location.href = '/profile';
                     }, 2000);
                 } else {
                     hideLoader();
