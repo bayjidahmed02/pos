@@ -8,6 +8,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ReportController;
 use App\Http\Middleware\TokenVerificationMiddleware;
 
 
@@ -80,4 +81,6 @@ Route::middleware([TokenVerificationMiddleware::class])->group(function () {
 Route::middleware([TokenVerificationMiddleware::class])->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/summery', [DashboardController::class, 'summery']);
+    Route::get("/report", [ReportController::class, 'index'])->name('report');
+    Route::get("/sales-report/{fromDate}/{toDate}", [ReportController::class, 'salesReport']);
 });
