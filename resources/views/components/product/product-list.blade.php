@@ -56,6 +56,7 @@
                     <td>${item.price}</td>
                     <td>${item.unit}</td>
                     <td>
+                        <button data-id="${item.id}" class="addBtn btn btn-sm btn-success">Add</button>
                         <button data-path="${item.img_url}" data-id="${item.id}" class="editBtn btn btn-sm btn-outline-success">Edit</button>
                         <button data-path="${item.img_url}" data-id="${item.id}" class="deleteBtn btn btn-sm btn-outline-danger">Delete</button>
                     </td>
@@ -78,6 +79,11 @@
             $('#deleteFilePath').val(img_url)
         })
 
+        $('.addBtn').on('click', function() {
+            let id = $(this).data('id');
+            $('#addProductId').val(id);
+            $('#add-quantity').modal('show');
+        });
 
         tableData.DataTable({
             lengthMenu: [10, 20, 50]

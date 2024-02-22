@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use App\Models\Invoice;
 use App\Models\InvoiceProduct;
+use App\Models\Product;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -39,16 +40,27 @@ class InvoiceController extends Controller
                 'customer_id' => $customer_id,
             ]);
             $invoice_id = $invoice->id;
+
             $products = $request->input('products');
 
             foreach ($products as $eachProduct) {
-                InvoiceProduct::create([
-                    'invoice_id' => $invoice_id,
-                    'user_id' => $user_id,
-                    'product_id' => $eachProduct['product_id'],
-                    'qty' => $eachProduct['qty'],
-                    'sale_price' => $eachProduct['sale_price'],
-                ]);
+                $product_id = $eachProduct['product_id'];
+                $qty = $eachProduct['qty'];
+
+                $product = Product::where('id', $product_id)->where('user_id', $user_id)->first();
+
+                if ($product && $product->unit >= $qty) {
+                    InvoiceProduct::create([
+                        'invoice_id' => $invoice_id,
+                        'user_id' => $user_id,
+                        'product_id' =>  $product_id,
+                        'qty' => $qty,
+                        'sale_price' => $eachProduct['sale_price'],
+                    ]);
+                    Product::where('user_id', $user_id)
+                        ->where('id', $product_id)
+                        ->decrement('unit', $qty);
+                }
             }
             DB::commit();
             return response()->json([

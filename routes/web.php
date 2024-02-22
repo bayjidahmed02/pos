@@ -10,7 +10,7 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReportController;
 use App\Http\Middleware\TokenVerificationMiddleware;
-
+use App\Models\Product;
 
 // Authentication View Routes
 Route::view('/registration', 'pages.auth.registration-page')->name('registration');
@@ -64,6 +64,7 @@ Route::middleware([TokenVerificationMiddleware::class])->group(function () {
     Route::post('/product-details', [ProductController::class, 'details']);
     Route::post('/product-update', [ProductController::class, 'update']);
     Route::post('/product-delete', [ProductController::class, 'delete']);
+    Route::post('/add-quantity', [ProductController::class, 'addQty']);
 });
 
 // Invoice and API Routes

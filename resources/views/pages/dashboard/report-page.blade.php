@@ -23,7 +23,7 @@
     function SalesReport() {
         let fromDate = document.getElementById('fromDate').value;
         let toDate = document.getElementById('toDate').value;
-        console.log(fromDate);
+        
         if (fromDate.length === 0 || toDate.length === 0) {
             errorToast('Date Range Required');
         } else {

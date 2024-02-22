@@ -17,7 +17,7 @@ class ReportController extends Controller
         $user_id = $request->header('id');
         $fromDate = date('Y-m-d', strtotime($request->fromDate));
         $toDate = date('Y-m-d', strtotime($request->toDate));
-
+     
 
         $total = Invoice::where('user_id', $user_id)
             ->whereDate('created_at', '>=', $fromDate)

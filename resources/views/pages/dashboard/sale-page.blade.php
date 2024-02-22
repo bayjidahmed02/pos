@@ -291,8 +291,6 @@
                 document.getElementById('PPrice').value = price;
             });
         }
-
-
         async function createInvoice() {
             let total = document.getElementById('total').innerText;
             let discount = document.getElementById('discount').innerText;

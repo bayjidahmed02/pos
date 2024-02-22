@@ -102,4 +102,27 @@ class ProductController extends Controller
         $product_id = $request->input('id');
         return Product::where('user_id', $user_id)->where('id', $product_id)->first();
     }
+
+    public function addQty(Request $request)
+    {
+        try {
+            $request->validate([
+                'qty' => 'required|numeric'
+            ]);
+            $user_id = $request->header('id');
+            $product_id = $request->input('id');
+            $qty = $request->input('qty');
+            Product::where('user_id', $user_id)->where('id', $product_id)->increment('unit', $qty);
+
+            return response()->json([
+                'status' => 'success',
+                'msg' => 'Added Product Quantity'
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'msg' => 'Something Went Wrong'
+            ]);
+        }
+    }
 }
